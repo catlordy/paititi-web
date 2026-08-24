@@ -5,6 +5,22 @@ const publicRoot = resolve("public");
 const channelsRoot = join(publicRoot, "channels");
 const errors = [];
 
+for (const requiredPath of [
+  "index.html",
+  "loader.js",
+  "styles.css",
+  "art-editor/index.html",
+  "art-editor/editor.css",
+  "art-editor/editor.js"
+]) {
+  try {
+    const info = await stat(join(publicRoot, requiredPath));
+    if (!info.isFile() || info.size === 0) errors.push(`empty static file: ${requiredPath}`);
+  } catch {
+    errors.push(`missing static file: ${requiredPath}`);
+  }
+}
+
 for (const name of await readdir(channelsRoot)) {
   if (!name.endsWith(".json")) continue;
   const channel = JSON.parse(await readFile(join(channelsRoot, name), "utf8"));
@@ -28,4 +44,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Web release registry is structurally valid.");
+console.log("Web shell, art editor, and release registry are structurally valid.");

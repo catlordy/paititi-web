@@ -4,6 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "verify": "node scripts/verify-release.mjs"
+    "verify": "node --check public/loader.js && node --check public/art-editor/editor.js && node scripts/verify-release.mjs"
   }
 }

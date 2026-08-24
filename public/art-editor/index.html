@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>美术资源编辑器 · 线路攻防</title>
+  <link rel="stylesheet" href="./editor.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <a class="back-link" href="../">← 返回 Demo</a>
+      <p class="eyebrow">PAITITI · ART PIPELINE</p>
+      <h1>美术资源编辑器</h1>
+      <p class="intro">选择本地 <code>paititi-art</code> 仓库，补交或更换 PNG。文件只在浏览器与本地仓库之间读写。</p>
+    </div>
+    <div class="connection-box">
+      <span id="connectionState" class="state-dot">未连接</span>
+      <button id="connectButton" class="primary" type="button">选择美术仓库</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="compatibility" class="notice warning" hidden>
+      当前浏览器不能直接写入本地文件夹。请使用桌面版 Chrome 或 Edge，并通过 HTTPS 或本地服务器打开本页。
+    </section>
+
+    <section class="summary" aria-label="资源统计">
+      <div><strong id="requiredCount">—</strong><span>必需槽位</span></div>
+      <div><strong id="readyCount">—</strong><span>已有资源</span></div>
+      <div><strong id="missingCount">—</strong><span>仍然缺位</span></div>
+      <div><strong id="queuedCount">0</strong><span>待保存</span></div>
+    </section>
+
+    <section class="toolbar" aria-label="筛选和操作">
+      <div class="filters" role="group" aria-label="资源筛选">
+        <button class="filter active" type="button" data-filter="all">全部</button>
+        <button class="filter" type="button" data-filter="missing">缺位</button>
+        <button class="filter" type="button" data-filter="ready">已有</button>
+        <button class="filter" type="button" data-filter="queued">待保存</button>
+      </div>
+      <div class="actions">
+        <button id="newSlotButton" class="secondary" type="button" disabled>新建槽位</button>
+        <button id="saveButton" class="primary" type="button" disabled>保存更改</button>
+      </div>
+    </section>
+
+    <section id="emptyState" class="empty-state">
+      <div class="empty-mark" aria-hidden="true">PNG</div>
+      <h2>尚未连接美术仓库</h2>
+      <p>连接后，这里会列出当前缺位和已经登记的资源。</p>
+    </section>
+
+    <section id="assetGrid" class="asset-grid" aria-live="polite" hidden></section>
+
+    <section id="gitPanel" class="git-panel" hidden>
+      <div>
+        <p class="eyebrow">本地文件已保存</p>
+        <h2>审核后提交到 Git</h2>
+        <p>网页不会替你推送私有仓库。可在 <code>paititi-art</code> 目录运行：</p>
+      </div>
+      <pre><code id="gitCommands">git add asset-manifest.json asset-slots.json runtime
+git commit -m "art: update runtime PNG assets"
+git push</code></pre>
+      <button id="copyGitButton" class="secondary" type="button">复制命令</button>
+    </section>
+  </main>
+
+  <dialog id="slotDialog">
+    <form id="slotForm">
+      <div class="dialog-title">
+        <div>
+          <p class="eyebrow">ASSET SLOT</p>
+          <h2>新建资源槽位</h2>
+        </div>
+        <button class="icon-button" type="button" id="closeSlotButton" aria-label="关闭">×</button>
+      </div>
+      <label>视觉 ID<input name="visual_id" required pattern="[a-z0-9_]+" placeholder="例如 icon_new_state"></label>
+      <label>中文名称<input name="label" required placeholder="例如 新状态图标"></label>
+      <label>分类<input name="category" required placeholder="例如 图标"></label>
+      <label>运行时路径<input name="runtime_path" required pattern="runtime/.+\.png" placeholder="runtime/ui/icon_new_state.png"></label>
+      <label>备注<textarea name="notes" rows="3" placeholder="尺寸、透明背景或使用方式"></textarea></label>
+      <label class="check-label"><input name="required" type="checkbox"> Demo 必需资源</label>
+      <div id="formError" class="form-error" aria-live="polite"></div>
+      <div class="dialog-actions">
+        <button class="secondary" type="button" id="cancelSlotButton">取消</button>
+        <button class="primary" type="submit">加入清单</button>
+      </div>
+    </form>
+  </dialog>
+
+  <input id="pngPicker" type="file" accept="image/png,.png" hidden>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./editor.js"></script>
+</body>
+</html>

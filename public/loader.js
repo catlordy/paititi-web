@@ -15,7 +15,7 @@ async function boot() {
   }
 
   const manifest = await readJson(channel.release_manifest);
-  if (!manifest.entrypoint) throw new Error("发布清单缺少 entrypoint。 ");
+  if (!manifest.entrypoint) throw new Error("发布清单缺少 entrypoint。");
 
   const frame = document.createElement("iframe");
   frame.src = new URL(manifest.entrypoint, new URL(channel.release_manifest, location.href)).href;
