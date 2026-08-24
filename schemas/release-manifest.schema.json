@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Paititi Web release manifest",
+  "type": "object",
+  "required": [
+    "manifest_version",
+    "product_version",
+    "channel",
+    "game_commit",
+    "ruleset_id",
+    "ruleset_version",
+    "ruleset_hash",
+    "art_commit",
+    "web_commit",
+    "godot_version",
+    "save_schema_version",
+    "entrypoint",
+    "files"
+  ],
+  "properties": {
+    "manifest_version": { "type": "integer", "minimum": 1 },
+    "product_version": { "type": "string", "minLength": 1 },
+    "channel": { "type": "string", "minLength": 1 },
+    "game_commit": { "type": "string", "minLength": 7 },
+    "ruleset_id": { "type": "string" },
+    "ruleset_version": { "type": "string" },
+    "ruleset_hash": { "type": "string" },
+    "art_repository": { "type": "string" },
+    "art_commit": { "type": "string", "minLength": 7 },
+    "web_repository": { "type": "string" },
+    "web_commit": { "type": "string", "minLength": 7 },
+    "godot_version": { "type": "string" },
+    "save_schema_version": { "type": "integer", "minimum": 1 },
+    "build_target": { "const": "web" },
+    "build_time_utc": { "type": "string" },
+    "entrypoint": { "type": "string", "minLength": 1 },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256", "size"],
+        "properties": {
+          "path": { "type": "string" },
+          "sha256": { "type": "string" },
+          "size": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
